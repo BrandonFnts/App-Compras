@@ -107,16 +107,22 @@
                                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                                             <ValidationProvider name="Entidad" rules="required" v-slot="{ errors }">
                                                 <v-select :items="entidad" outlined label="Entidad" color="orange"
-                                                    v-model="entidadSeleccionada" dense :error-messages="errors">
-                                                    <v-option>{{ entidad }}</v-option>
+                                                    v-model="entidadSeleccionada" dense :error-messages="errors"
+                                                    @input="cargarMunicipiosPorEstado">
+                                                    <template v-slot:item="{ item }">
+                                                        {{ item }}
+                                                    </template>
                                                 </v-select>
                                             </ValidationProvider>
                                         </div>
+
                                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                                             <ValidationProvider name="Municipio" rules="required" v-slot="{ errors }">
                                                 <v-select :items="municipio" outlined label="Municipio" color="orange"
                                                     v-model="municipioSeleccionado" dense :error-messages="errors">
-                                                    <v-option>{{ municipio }}</v-option>
+                                                    <template v-slot:item="{ item }">
+                                                        {{ item }}
+                                                    </template>
                                                 </v-select>
                                             </ValidationProvider>
                                         </div>
@@ -254,22 +260,14 @@ export default {
     },
     data() {
         return {
-            items: [],
+
             status: [
                 'Activo',
                 'Inactivo',
                 'Pediente'
             ],
-            entidad: [
-                'Hidalgo',
-                'Edomex',
-                'CDMX'
-            ],
-            municipio: [
-                'Atotonilco de Tula',
-                'Ecatepec',
-                'los pinos'
-            ],
+            entidad: [],
+            municipio: [{}],
             rfc: null,
             razonSocial: null,
             contacto: null,
@@ -285,6 +283,7 @@ export default {
             entidadSeleccionada: null,
             municipioSeleccionado: null,
             avatar_name: 'BF',
+
             formularioCompleto: false,
         }
     },
@@ -331,7 +330,34 @@ export default {
                 this.formularioCompleto = !this.$refs.observer.flags.invalid;
             }
         },
+        buscarEstadoId(estadoSeleccionado) {
+            for (let i = 0; i < this.entidad.length; i++) {
+                if (this.entidad[i] === estadoSeleccionado) {
+                    return i + 1;
+                }
+            }
+            console.log('Estado no encontrado:', estadoSeleccionado);
+            return null;
+        },
+        cargarMunicipiosPorEstado() {
+            if (this.entidadSeleccionada) {
+                const estadoId = this.buscarEstadoId(this.entidadSeleccionada);
 
+                if (estadoId !== null) {
+                    axios.get(`https://localhost:44331/api/documento/municipioEstado/${estadoId}`)
+                        .then(response => {
+                            if (response.data && Array.isArray(response.data.data)) {
+                                this.municipio = response.data.data.map(municipio => municipio.municipio);
+                            } else {
+                                console.error('La respuesta no contiene la estructura esperada');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al obtener los municipios desde MongoDB', error);
+                        });
+                }
+            }
+        },
     },
     watch: {
         rfc: 'actualizarFormularioCompleto',
@@ -348,8 +374,20 @@ export default {
         colonia: 'actualizarFormularioCompleto',
         entidadSeleccionada: 'actualizarFormularioCompleto',
         municipioSeleccionado: 'actualizarFormularioCompleto',
+    },
+    created() {
+        axios.get('https://localhost:44331/api/documento/entidad')
+            .then(response => {
+                if (response.data && Array.isArray(response.data.data)) {
+                    this.entidad = response.data.data.map(estado => estado.estado);
+                } else {
+                    console.error('La respuesta no contiene la estructura esperada');
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener los estados desde MongoDB', error);
+            });
     }
-
 }
 </script>
 
