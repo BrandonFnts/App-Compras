@@ -264,7 +264,7 @@ export default {
             status: [
                 'Activo',
                 'Inactivo',
-                'Pediente'
+                'Pendiente'
             ],
             entidad: [],
             municipio: [{}],
