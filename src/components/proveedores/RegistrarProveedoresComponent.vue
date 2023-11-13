@@ -51,7 +51,7 @@
                                             </ValidationProvider>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                                            <ValidationProvider name="Tel. Movil" rules="required|numeros|max:10"
+                                            <ValidationProvider name="Tel. Movil" rules="required|max:10"
                                                 v-slot="{ errors }">
                                                 <v-text-field label="Tel. Movil" color="orange" v-model="telMovil" outlined
                                                     clearable dense :error-messages="errors"></v-text-field>
@@ -203,6 +203,7 @@
 import { required, max, min } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider } from 'vee-validate';
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 extend('max', {
     ...max,
@@ -282,10 +283,17 @@ export default {
             colonia: null,
             entidadSeleccionada: null,
             municipioSeleccionado: null,
-            avatar_name: 'BF',
+            avatar_name: '',
 
             formularioCompleto: false,
         }
+    },
+    computed: {
+        ...mapGetters(['getUserName']),
+    },
+    mounted() {
+        const iniciales = this.getUserName.substring(0, 2);
+        this.avatar_name = iniciales;
     },
     methods: {
         validateForm(validate) {
@@ -313,11 +321,12 @@ export default {
                         colonia: this.colonia,
                         entidad: this.entidadSeleccionada,
                         municipio: this.municipioSeleccionado,
+                        usuario: this.getUserName,
                     };
                     console.log('Datos a enviar:', data);
                     axios.post('https://localhost:44331/api/documento/proveedor/registro', data)
                         .then(response => {
-                            console.log('Proveedor creado:', response.data);
+                            alert('Se creo el proveedor');
                         })
                         .catch(error => {
                             console.error('Error al crear proveedor:', error);
@@ -387,7 +396,9 @@ export default {
             .catch(error => {
                 console.error('Error al obtener los estados desde MongoDB', error);
             });
-    }
+
+        console.log(this.avatar_name);
+    },
 }
 </script>
 

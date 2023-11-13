@@ -17,56 +17,109 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.rfc" label="Rfc"></v-text-field>
+                          <ValidationProvider name="rfc" rules="required|rfc" v-slot="{ errors }">
+                            <v-text-field label="Rfc" color="orange" v-model="editedItem.rfc" outlined clearable dense
+                              :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.razon_social" label="Razón Social"></v-text-field>
+                          <ValidationProvider name="Razón Social" rules="required|min:5|max:250" v-slot="{ errors }">
+                            <v-text-field label="Razón Social" color="orange" v-model="editedItem.razon_social" outlined
+                              clearable dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.contacto" label="Contacto"></v-text-field>
+                          <ValidationProvider name="Contacto" rules="required|min:5|max:250" v-slot="{ errors }">
+                            <v-text-field label="Contacto" color="orange" v-model="editedItem.contacto" outlined clearable
+                              dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.status" label="Status"></v-text-field>
+                          <ValidationProvider name="Status" rules="required" v-slot="{ errors }">
+                            <v-select :items="status" outlined label="Status" color="orange" v-model="editedItem.status"
+                              dense :error-messages="errors">
+                              <v-option>{{ status }}</v-option>
+                            </v-select>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.tel_principal" label="Tel. Principal"></v-text-field>
+                          <ValidationProvider name="Tel. Principal" rules="required|numeros|max:10" v-slot="{ errors }">
+                            <v-text-field label="Tel. Principal" color="orange" v-model="editedItem.tel_principal"
+                              outlined clearable dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.tel_movil" label="Tel. Movil"></v-text-field>
+                          <ValidationProvider name="Tel. Movil" rules="required|max:10" v-slot="{ errors }">
+                            <v-text-field label="Tel. Movil" color="orange" v-model="editedItem.tel_movil" outlined
+                              clearable dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                          <ValidationProvider name="Email" rules="required|email" v-slot="{ errors }">
+                            <v-text-field label="Email" color="orange" v-model="editedItem.email" outlined clearable dense
+                              :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.codigo_postal" label="Código Postal"></v-text-field>
+                          <ValidationProvider name="Código Postal" rules="required|numeros|max:5" v-slot="{ errors }">
+                            <v-text-field label="Código Postal" color="orange" v-model="editedItem.codigo_postal" outlined
+                              clearable dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.numero_interior" label="Número Interior"></v-text-field>
+                          <ValidationProvider name="Número Interior" rules="required" v-slot="{ errors }">
+                            <v-text-field label="Número Interior" color="orange" v-model="editedItem.numero_interior"
+                              outlined clearable dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.numero_exterior" label="Número Exterior"></v-text-field>
+                          <ValidationProvider name="Número Exterior" rules="required" v-slot="{ errors }">
+                            <v-text-field label="Número Exterior" color="orange" v-model="editedItem.numero_exterior"
+                              outlined clearable dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.calle" label="Calle"></v-text-field>
+                          <ValidationProvider name="Calle" rules="required|max:100|min:5" v-slot="{ errors }">
+                            <v-text-field label="Calle" color="orange" v-model="editedItem.calle" outlined clearable dense
+                              :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.colonia" label="Colonia"></v-text-field>
+                          <ValidationProvider name="Colonia" rules="required|max:100|min:5" v-slot="{ errors }">
+                            <v-text-field label="Colonia" color="orange" v-model="editedItem.colonia" outlined clearable
+                              dense :error-messages="errors"></v-text-field>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.entidad" label="Entidad"></v-text-field>
+                          <ValidationProvider name="Entidad" rules="required" v-slot="{ errors }">
+                            <v-select :items="estados" outlined label="Entidad" color="orange"
+                              v-model="editedItem.entidad" dense :error-messages="errors"
+                              @input="cargarMunicipiosPorEstado">
+                              <template v-slot:item="{ item }">
+                                {{ item }}
+                              </template>
+                            </v-select>
+                          </ValidationProvider>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.municipio" label="Municipio"></v-text-field>
+                          <ValidationProvider name="Municipio" rules="required" v-slot="{ errors }">
+                            <v-select :items="municipios" outlined label="Municipio" color="orange"
+                              v-model="editedItem.municipio" dense :error-messages="errors">
+                              <template v-slot:item="{ item }">
+                                {{ item }}
+                              </template>
+                            </v-select>
+                          </ValidationProvider>
                         </v-col>
                       </v-row>
                     </v-container>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
+                    <v-btn color="orange" text @click="close">
                       Cancelar
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="orange" text @click="save">
                       Guardar
                     </v-btn>
                   </v-card-actions>
@@ -77,8 +130,8 @@
                   <v-card-title class="text-h5">¿Quieres borrar este elemento?</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete">Cancelar</v-btn>
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                    <v-btn color="orange" text @click="closeDelete">Cancelar</v-btn>
+                    <v-btn color="orange" text @click="deleteItemConfirm">OK</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -101,7 +154,58 @@
 </template>
 
 <script>
+import { required, max, min } from 'vee-validate/dist/rules';
+import { extend, ValidationProvider } from 'vee-validate';
 import axios from 'axios';
+import { mapGetters } from 'vuex';
+
+extend('max', {
+  ...max,
+  message: 'El campo {_field_} no debe tener más de {_max_} caracteres',
+})
+extend('min', {
+  ...min,
+  message: 'El campo {_field_} no debe tener menos de {_min_} caracteres',
+})
+extend('required', {
+  ...required,
+  message: 'El campo {_field_} es obligatorio',
+})
+extend('base', {
+  validate: value => {
+    const regex = /^[a-zA-Z0-9]+$/;
+    return regex.test(value);
+  },
+  message: 'Este campo solo debe de contener letras y números',
+})
+extend('numeros', {
+  validate: value => {
+    const regex = /^[0-9]+$/;
+    return regex.test(value);
+  },
+  message: 'El campo {_field_} solo debe de contener números',
+})
+extend('email', {
+  validate: value => {
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    return regex.test(value);
+  },
+  message: 'El campo {_field_} debe ser una dirección de correo electrónico válida',
+})
+extend('espa', {
+  validate: value => {
+    const regex = /\s{2,}^[a-zA-Z0-9ñ.,:@!?¿¡áéíóú\s]*$/;
+    return regex.test(value);
+  },
+  message: 'El campo {_field_} debe ser una dirección de correo electrónico válida',
+})
+extend('rfc', {
+  validate: value => {
+    const regex = /^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$/;
+    return regex.test(value);
+  },
+  message: 'El campo {_field_} debe ser un rfc valido',
+})
 
 export default {
   name: 'TableComponent',
@@ -166,22 +270,44 @@ export default {
         entidad: '',
         municipio: '',
       },
+      status: [
+        'Activo',
+        'Inactivo',
+        'Pendiente'
+      ],
+      estados: [],
+      municipios: [{}],
       formTitle: '',
     }
   },
+  computed: {
+    ...mapGetters(['getUserName']),
+  },
   methods: {
     initialize() {
-      axios.get('https://localhost:44331/api/documento/proveedor')
+      const nombreUsuario = this.getUserName;
+
+      axios.get(`https://localhost:44331/api/documento/proveedor/usuario/${nombreUsuario}`)
         .then(response => {
           if (response.data && Array.isArray(response.data.data)) {
             this.proveedores = response.data.data;
-            console.log('Datos de proveedores cargados correctamente:', this.proveedores);
           } else {
             console.error('La respuesta no contiene la estructura esperada');
           }
         })
         .catch(error => {
           console.error('Error al obtener los datos de proveedores desde MongoDB', error);
+        });
+      axios.get('https://localhost:44331/api/documento/entidad')
+        .then(response => {
+          if (response.data && Array.isArray(response.data.data)) {
+            this.estados = response.data.data.map(estado => estado.estado);
+          } else {
+            console.error('La respuesta no contiene la estructura esperada');
+          }
+        })
+        .catch(error => {
+          console.error('Error al obtener los estados desde MongoDB', error);
         });
     },
     close() {
@@ -222,6 +348,34 @@ export default {
       this.editedIndex = this.proveedores.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
+    },
+    buscarEstadoId(estadoSeleccionado) {
+      for (let i = 0; i < this.estados.length; i++) {
+        if (this.estados[i] === estadoSeleccionado) {
+          return i + 1;
+        }
+      }
+      console.log('Estado no encontrado:', estadoSeleccionado);
+      return null;
+    },
+    cargarMunicipiosPorEstado() {
+      if (this.editedItem.entidad) {
+        const estadoId = this.buscarEstadoId(this.editedItem.entidad);
+
+        if (estadoId !== null) {
+          axios.get(`https://localhost:44331/api/documento/municipioEstado/${estadoId}`)
+            .then(response => {
+              if (response.data && Array.isArray(response.data.data)) {
+                this.municipios = response.data.data.map(municipio => municipio.municipio);
+              } else {
+                console.error('La respuesta no contiene la estructura esperada');
+              }
+            })
+            .catch(error => {
+              console.error('Error al obtener los municipios desde MongoDB', error);
+            });
+        }
+      }
     },
   },
   watch: {

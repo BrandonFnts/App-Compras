@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ManagerComponent from '../components/proveedores/ManagerComponent.vue'
 import RegistrarProveedoresComponent from '@/components/proveedores/RegistrarProveedoresComponent.vue'
+import LoginView from '../views/LoginView.vue'
+import SiginView from '../views/SiginView.vue'
 
 import { ValidationProvider } from 'vee-validate';
 
@@ -34,6 +36,16 @@ const routes = [
     path: '/registrar-proveedores',
     name: 'registrar-proveedores',
     component: RegistrarProveedoresComponent
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    path: '/sigin',
+    name: 'sigin',
+    component: SiginView
   }
 ]
 
